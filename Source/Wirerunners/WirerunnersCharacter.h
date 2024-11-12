@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "WirerunnersCharacter.generated.h"
@@ -16,8 +17,14 @@ struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
-UCLASS(config=Game)
-class AWirerunnersCharacter : public ACharacter
+// TArray<UStaticMeshComponent> StaticComps;
+// YourActor->GetComponents** <UStaticMeshComponent>** (StaticComps);
+
+// AIPerceptionComponent<UAIPerceptionComponent> AIPerception;
+
+
+UCLASS(config=Game)	
+class AWirerunnersCharacter : public ACharacter, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -60,7 +67,7 @@ protected:
 	// APawn interface
 	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
 	// End of APawn interface
-
+		
 public:
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }

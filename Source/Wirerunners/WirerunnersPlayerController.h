@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GenericTeamAgentInterface.h"
 #include "GameFramework/PlayerController.h"
 #include "WirerunnersPlayerController.generated.h"
 
@@ -12,7 +13,7 @@ class UInputMappingContext;
  *
  */
 UCLASS()
-class WIRERUNNERS_API AWirerunnersPlayerController : public APlayerController
+class WIRERUNNERS_API AWirerunnersPlayerController : public APlayerController, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 	
@@ -24,7 +25,7 @@ protected:
 
 	// Begin Actor interface
 protected:
-
+	AWirerunnersPlayerController();
 	virtual void BeginPlay() override;
 
 	// End Actor interface

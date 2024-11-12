@@ -5,6 +5,11 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 
+AWirerunnersPlayerController::AWirerunnersPlayerController()
+{
+	IGenericTeamAgentInterface::SetGenericTeamId(FGenericTeamId(1));
+}
+
 void AWirerunnersPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

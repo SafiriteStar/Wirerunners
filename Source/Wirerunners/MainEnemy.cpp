@@ -11,6 +11,10 @@ AMainEnemy::AMainEnemy()
 
 }
 
+void AMainEnemy::SpawnActor()
+{
+}
+
 // Called when the game starts or when spawned
 void AMainEnemy::BeginPlay()
 {
