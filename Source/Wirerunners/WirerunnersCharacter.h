@@ -5,6 +5,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+
+#include "CharacterInterface.h"
+
 #include "WirerunnersCharacter.generated.h"
 
 class UInputComponent;
@@ -17,7 +20,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class AWirerunnersCharacter : public ACharacter
+class AWirerunnersCharacter : public ACharacter, public ICharacterInterface
 {
 	GENERATED_BODY()
 
@@ -66,6 +69,8 @@ public:
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+    
+    bool IsEnemy_Implementation() override;
 
 };
 

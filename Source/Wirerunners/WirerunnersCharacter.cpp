@@ -93,3 +93,8 @@ void AWirerunnersCharacter::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+bool AWirerunnersCharacter::IsEnemy_Implementation()
+{
+    return true;
+}
