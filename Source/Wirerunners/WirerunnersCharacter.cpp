@@ -96,5 +96,30 @@ void AWirerunnersCharacter::Look(const FInputActionValue& Value)
 
 bool AWirerunnersCharacter::IsEnemy_Implementation()
 {
-    return true;
+    return (Health > 0);
+}
+
+float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+    if (Health <= 0)
+    {
+        return 0;
+    }
+    
+    float DamageCaused = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+    
+    DamageCaused = FMath::Min(Health, DamageCaused);
+    Health -= DamageCaused;
+    
+    if (Health <= 0)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("character died"));
+        
+        // DisableInput(GetWorld()->GetFirstPlayerController());
+        // GetMesh()->SetSimulatePhysics(true);
+        
+        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    }
+    
+    return DamageCaused;
 }

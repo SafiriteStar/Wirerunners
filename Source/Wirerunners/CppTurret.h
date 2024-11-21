@@ -31,11 +31,20 @@ private:
     UPROPERTY(VisibleAnywhere)
         USceneComponent* BeamTarget;
     
+    UPROPERTY(EditDefaultsOnly, Category = Shooting)
+        UParticleSystemComponent* P_MuzzleFlash;
+    
+    UPROPERTY(EditDefaultsOnly, Category = Shooting)
+        USoundBase* ShootSound;
+    
     UPROPERTY()
         FTimerHandle ChangeTargetTimerHandle;
     
     UPROPERTY()
         FTimerHandle TraceTimerHandle;
+    
+    UPROPERTY()
+        FTimerHandle ShootTimerHandle;
     
     // Rotation related variables
     int TimerCount = 0;
@@ -53,6 +62,12 @@ private:
     
     UPROPERTY(EditAnywhere)
         float RotationToPlayerVelocity = 100.0f;
+    
+    UPROPERTY(EditAnywhere)
+        float ShootRate = 1.0f;
+    
+    UPROPERTY(EditAnywhere)
+        float ShootDelay = 1.0f; // delay it takes to shoot the 1st shot
     
     UPROPERTY()
         AActor* Enemy = nullptr;
@@ -74,6 +89,9 @@ private:
     
     UFUNCTION()
         void FollowEnemy(float DeltaTime); // change to FollowPlayer
+    
+    UFUNCTION()
+        void Shoot();
     
 public:	
 	// Sets default values for this actor's properties

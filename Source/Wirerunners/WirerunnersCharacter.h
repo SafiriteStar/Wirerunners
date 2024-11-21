@@ -45,12 +45,17 @@ public:
 
 protected:
 	virtual void BeginPlay();
+    
+    UPROPERTY(EditAnywhere)
+    float Health = 100;
 
 public:
 		
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;
+    
+    virtual float TakeDamage (float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
 	/** Called for movement input */

@@ -8,6 +8,10 @@
 
 #include "TurretAnimInterface.h"
 
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Engine/DamageEvents.h"
+
 #define OUT
 
 // Sets default values
@@ -35,6 +39,10 @@ ACppTurret::ACppTurret()
     BeamTarget->SetupAttachment(Root);
     
     SetBeamLength(BeamLength);
+    
+    P_MuzzleFlash = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Muzzle Flash"));
+    P_MuzzleFlash->SetupAttachment(TurretMesh, TEXT("BeamSocket"));
+    P_MuzzleFlash->SetAutoActivate(false);
 }
 
 // Called when the game starts or when spawned
@@ -147,22 +155,33 @@ void ACppTurret::CheckEnemy(AActor* HitActor)
         bool bEnemy = ICharacterInterface::Execute_IsEnemy(HitActor);
         if (bEnemy)
         {
-            Enemy = HitActor;
-            UE_LOG(LogTemp, Warning, TEXT("Player Detected"));
+            if (!Enemy)
+            {
+                Enemy = HitActor;
+                
+                // start shooting
+                GetWorldTimerManager().SetTimer(ShootTimerHandle, this, &ACppTurret::Shoot, ShootRate, true, ShootDelay);
+            }
+            // UE_LOG(LogTemp, Warning, TEXT("Player Detected"));
         }
         else
         {
             if (Enemy != nullptr)
             {
                 Enemy = nullptr;
-                UE_LOG(LogTemp, Warning, TEXT("Player Lost"));
+                // UE_LOG(LogTemp, Warning, TEXT("Player Lost"));
             }
         }
     }
     else
     {
-        Enemy = nullptr;
-        UE_LOG(LogTemp, Warning, TEXT("Not a player"));
+        if (Enemy)
+        {
+            Enemy = nullptr;
+            // stop shooting
+            GetWorldTimerManager().ClearTimer(ShootTimerHandle);
+        }
+        // UE_LOG(LogTemp, Warning, TEXT("Not a player "));
     }
 }
 
@@ -178,5 +197,34 @@ void ACppTurret::FollowEnemy(float DeltaTime)
     if (TurretMesh->GetAnimInstance()->Implements<UTurretAnimInterface>())
     {
         ITurretAnimInterface::Execute_UpdateLookAtRotation(TurretMesh->GetAnimInstance(), LookAtRotation);
+    }
+}
+
+void ACppTurret::Shoot()
+{
+    UGameplayStatics::PlaySoundAtLocation(this, ShootSound, P_MuzzleFlash->GetComponentLocation());
+    
+    P_MuzzleFlash->Activate(true);
+    
+    FHitResult HitResult;
+    
+    FVector Start = TurretMesh->GetSocketLocation("BeamSocket");
+    FVector End = Start + Beam->GetForwardVector() * BeamLength;
+    
+    FCollisionQueryParams CollQueryParams;
+    CollQueryParams.AddIgnoredActor(this);
+    
+    bool bHit = GetWorld()->LineTraceSingleByChannel(
+                                                     OUT HitResult,
+                                                     Start,
+                                                     End,
+                                                     ECollisionChannel::ECC_Camera,
+                                                     CollQueryParams
+                                                     );
+    
+    if (bHit)
+    {
+        FPointDamageEvent DamageEvent(10.0f, HitResult, Beam->GetForwardVector(), nullptr);
+        HitResult.GetActor()->TakeDamage(10.0f, DamageEvent, GetInstigatorController(), this);
     }
 }
