@@ -127,6 +127,10 @@ float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
         UE_LOG(LogTemp, Warning, TEXT("character died"));
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     }
+    else if (Health <= 50.0f)
+    {
+        EnableDamagedVFX();
+    }
     
     return DamageCaused;
 }

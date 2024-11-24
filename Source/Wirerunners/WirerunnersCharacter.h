@@ -54,6 +54,12 @@ class AWirerunnersCharacter : public ACharacter, public IGenericTeamAgentInterfa
 	
 public:
 	AWirerunnersCharacter();
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+        void EnableDamagedVFX();
+    
+    UFUNCTION(BlueprintImplementableEvent, Category = "HUD")
+        void DisableDamagedVFX();
 
 protected:
 	virtual void BeginPlay();
