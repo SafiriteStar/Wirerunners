@@ -6,6 +6,7 @@
 #include "GenericTeamAgentInterface.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "InputAction.h"
 
 #include "CharacterInterface.h"
 
@@ -47,6 +48,9 @@ class AWirerunnersCharacter : public ACharacter, public IGenericTeamAgentInterfa
 	/** Move Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	UInputAction* MoveAction;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input,  meta=(AllowPrivateAccess = "true"))
+    UInputAction* ToggleDamageCheat;
 	
 public:
 	AWirerunnersCharacter();
@@ -56,9 +60,12 @@ protected:
     
     UPROPERTY(EditAnywhere)
     float Health = 100;
+    
+    bool bCanTakeDamage = true;
+    
+    void ToggleDamageCheatState(const FInputActionValue& Value);
 
 public:
-		
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* LookAction;

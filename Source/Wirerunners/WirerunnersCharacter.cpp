@@ -11,6 +11,10 @@
 #include "InputActionValue.h"
 #include "Engine/LocalPlayer.h"
 
+#include "InputMappingContext.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
+
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
 //////////////////////////////////////////////////////////////////////////
@@ -62,6 +66,9 @@ void AWirerunnersCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInp
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AWirerunnersCharacter::Look);
+        
+        // Toggle damage ability with the '1' key
+        EnhancedInputComponent->BindAction(ToggleDamageCheat, ETriggerEvent::Triggered, this, &AWirerunnersCharacter::ToggleDamageCheatState);
 	}
 	else
 	{
@@ -103,11 +110,13 @@ bool AWirerunnersCharacter::IsEnemy_Implementation()
 
 float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
 {
-    if (Health <= 0)
+    if (!bCanTakeDamage || Health <= 0)
     {
+        // If we can't take damage or health is already 0, return 0 damage.
         return 0;
     }
-    
+
+    // If we can take damage, process it
     float DamageCaused = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
     
     DamageCaused = FMath::Min(Health, DamageCaused);
@@ -116,12 +125,23 @@ float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
     if (Health <= 0)
     {
         UE_LOG(LogTemp, Warning, TEXT("character died"));
-        
-        // DisableInput(GetWorld()->GetFirstPlayerController());
-        // GetMesh()->SetSimulatePhysics(true);
-        
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
     }
     
     return DamageCaused;
 }
+
+void AWirerunnersCharacter::ToggleDamageCheatState(const FInputActionValue& Value)
+{
+    bCanTakeDamage = !bCanTakeDamage;
+    
+    if (bCanTakeDamage)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Damage is now enabled"));
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Damage is now disabled"));
+    }
+}
+
