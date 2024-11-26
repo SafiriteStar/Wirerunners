@@ -46,7 +46,7 @@ void AWirerunnersProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherAc
 		{
 			if (UHealthComponent* HealthComponent = Cast<UHealthComponent>(Player->FindComponentByClass(UHealthComponent::StaticClass())))
 			{
-				HealthComponent->TakeDamage(10);
+				//HealthComponent->TakeDamage(10);
 				UE_LOG(LogTemp, Warning, TEXT("Took Damage"));
 			}
 		}

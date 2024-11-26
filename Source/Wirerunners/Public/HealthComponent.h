@@ -31,6 +31,6 @@ public:
 	// UPROPERTY(BlueprintReadOnly)
 	// float health;
 
-	void TakeDamage(float Damage);
+	//void TakeDamage(float Damage);
 		
 };
