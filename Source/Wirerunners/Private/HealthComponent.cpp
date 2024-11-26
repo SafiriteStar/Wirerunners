@@ -4,14 +4,7 @@
 #include "HealthComponent.h"
 
 // Sets default values for this component's properties
-UHealthComponent::UHealthComponent(): maxHealth(100), health(100)
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
-}
 
 
 // Called when the game starts
@@ -32,8 +25,5 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UHealthComponent::TakeDamage(float Damage)
-{
-	health = FMath::Max(0, health - Damage);
-}
+
 
