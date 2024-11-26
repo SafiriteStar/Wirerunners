@@ -129,7 +129,8 @@ float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
     }
     else if (Health <= 50.0f)
     {
-        EnableDamagedVFX();
+        //EnableDamagedVFX();
+        TriggerAnyDamageEvent();
     }
     
     return DamageCaused;
