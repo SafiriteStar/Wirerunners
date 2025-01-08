@@ -94,6 +94,10 @@ private:
         void Shoot();
     
 public:	
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool CanShoot = true;
+
 	// Sets default values for this actor's properties
 	ACppTurret();
 
