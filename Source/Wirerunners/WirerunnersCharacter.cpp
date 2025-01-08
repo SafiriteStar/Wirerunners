@@ -14,6 +14,7 @@
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+// #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -126,6 +127,14 @@ float AWirerunnersCharacter::TakeDamage(float DamageAmount, FDamageEvent const& 
     {
         UE_LOG(LogTemp, Warning, TEXT("character died"));
         GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+        UWorld* World = GetWorld();
+        if (World)
+        {
+            FName CurrentLevelName = *World->GetName();
+            UE_LOG(LogTemp, Warning, TEXT("world level name: " + CurrentLevelName.ToString()));
+            UGameplayStatics::OpenLevel(World, CurrentLevelName);
+            UE_LOG(LogTemp, Warning, TEXT("reloaded level"));
+        }
     }
     else if (Health <= 50.0f)
     {
