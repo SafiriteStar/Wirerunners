@@ -202,6 +202,10 @@ void ACppTurret::FollowEnemy(float DeltaTime)
 
 void ACppTurret::Shoot()
 {
+    if (!CanShoot) {
+        return;
+    }
+
     UGameplayStatics::PlaySoundAtLocation(this, ShootSound, P_MuzzleFlash->GetComponentLocation());
     
     P_MuzzleFlash->Activate(true);
